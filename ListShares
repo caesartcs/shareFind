@@ -1,0 +1,18 @@
+clear
+# TODO
+# [x] add a clear variable if error
+# [ ] Add initial share listing after computer name
+
+
+foreach ($compName in gc C:\path\file.txt) {
+     
+     try { $dirs = gci -Path $compname -Recurse -Depth 1 } 
+     catch [System.UnauthorizedAccessException] { Write-host  -f Red "Unauthorized Access:" $share  } 
+
+     if ( $dirs.Count -gt 0 ) { $dirs | foreach { $fp = $_.FullName; Write-host -f Green $fp } }
+}
+
+# Clear Variables for each launch of script
+$variables = gv | select -ExpandProperty Name
+$variables += 'variables'
+gv | where { $variables -notcontains $_.Name } | foreach { rv $_ }
